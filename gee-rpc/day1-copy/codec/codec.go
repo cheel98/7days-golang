@@ -14,3 +14,18 @@ type Header struct {
 	Seq           uint64 // sequence number chosen by client
 	Error         string
 }
+type Type string
+
+const (
+	GobType  Type = "application/gob"
+	JsonType Type = "application/json" // not implemented
+)
+
+type NewCodecFunc func(io.ReadWriteCloser) Codec
+
+var NewCodecFuncMap map[Type]NewCodecFunc
+
+func init() {
+	NewCodecFuncMap = make(map[Type]NewCodecFunc)
+	NewCodecFuncMap[GobType] = NewGobCodec
+}
