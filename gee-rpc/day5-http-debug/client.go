@@ -283,8 +283,7 @@ func Dial(network, address string, opts ...*Option) (*Client, error) {
 
 // NewHTTPClient new a Client instance via HTTP as transport protocol
 func NewHTTPClient(conn net.Conn, opt *Option) (*Client, error) {
-	_, _ = io.WriteString(conn, fmt.Sprintf("CONNECT %s HTTP/1.0\n\n", defaultRPCPath))
-
+	conn.Write([]byte(fmt.Sprintf("CONNECTED %s HTTP/1.0\n\n", defaultRPCPath)))
 	// Require successful HTTP response
 	// before switching to RPC protocol.
 	resp, err := http.ReadResponse(bufio.NewReader(conn), &http.Request{})

@@ -213,10 +213,10 @@ func Accept(lis net.Listener) { DefaultServer.Accept(lis) }
 
 // Register publishes in the server the set of methods of the
 // receiver value that satisfy the following conditions:
-//	- exported method of exported type
-//	- two arguments, both of exported type
-//	- the second argument is a pointer
-//	- one return value, of type error
+//   - exported method of exported type
+//   - two arguments, both of exported type
+//   - the second argument is a pointer
+//   - one return value, of type error
 func (server *Server) Register(rcvr interface{}) error {
 	s := newService(rcvr)
 	if _, dup := server.serviceMap.LoadOrStore(s.name, s); dup {
@@ -236,10 +236,10 @@ const (
 
 // ServeHTTP implements an http.Handler that answers RPC requests.
 func (server *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	if req.Method != "CONNECT" {
+	if req.Method != "CONNECTED" {
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		w.WriteHeader(http.StatusMethodNotAllowed)
-		_, _ = io.WriteString(w, "405 must CONNECT\n")
+		_, _ = io.WriteString(w, "405 must CONNECTED\n")
 		return
 	}
 	conn, _, err := w.(http.Hijacker).Hijack()
@@ -257,6 +257,7 @@ func (server *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 func (server *Server) HandleHTTP() {
 	http.Handle(defaultRPCPath, server)
 	http.Handle(defaultDebugPath, debugHTTP{server})
+	NewRPCWeb()
 	log.Println("rpc server debug path:", defaultDebugPath)
 }
 

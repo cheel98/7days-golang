@@ -12,10 +12,17 @@ import (
 
 type Foo int
 
-type Args struct{ Num1, Num2 int }
+type Args struct {
+	Num1 int `json:"num1"`
+	Num2 int `json:"num2"`
+}
 
 func (f Foo) Sum(args Args, reply *int) error {
 	*reply = args.Num1 + args.Num2
+	return nil
+}
+func (f Foo) Sub(args Args, reply *int) error {
+	*reply = args.Num1 - args.Num2
 	return nil
 }
 
