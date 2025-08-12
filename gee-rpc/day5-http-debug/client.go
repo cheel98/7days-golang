@@ -287,7 +287,7 @@ func NewHTTPClient(conn net.Conn, opt *Option) (*Client, error) {
 
 	// Require successful HTTP response
 	// before switching to RPC protocol.
-	resp, err := http.ReadResponse(bufio.NewReader(conn), &http.Request{Method: "CONNECT"})
+	resp, err := http.ReadResponse(bufio.NewReader(conn), &http.Request{})
 	if err == nil && resp.Status == connected {
 		return NewClient(conn, opt)
 	}
